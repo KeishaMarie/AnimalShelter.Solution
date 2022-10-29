@@ -9,7 +9,7 @@ using AnimalShelter.Models;
 
 namespace AnimalShelter.Controllers
 {
-  [Route("api/[controller")]
+  [Route("api/[controller]")]
   [ApiController]
   public class AnimalsController : ControllerBase
   {
@@ -55,7 +55,7 @@ namespace AnimalShelter.Controllers
     }
 
     //Get: api/Animals/5 Read specific animal
-    [HttpGet("{id")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<Animal>> GetAnimal(int id)
     {
       var animal = await _db.Animals.FindAsync(id);
