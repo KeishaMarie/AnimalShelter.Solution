@@ -21,7 +21,8 @@ namespace AnimalShelter
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<AnimalShelterContext>(opt => opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultCOnnection"])));
+            services.AddDbContext<AnimalShelterContext>(opt =>
+                opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
         }
 
