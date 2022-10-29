@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AnimalShelter.Models
 {
-  public class AnimalShelterContext : DbContext
+  public class AnimalShelterContext : IdentityDbContext
   {
     public AnimalShelterContext(DbContextOptions<AnimalShelterContext> options)
       :base(options)
@@ -11,7 +12,7 @@ namespace AnimalShelter.Models
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-      // base.OnModelCreating(builder); needed for authentication
+      base.OnModelCreating(builder); //this line needed for authentication to run properly with seeded database
       builder.Entity<Animal>()
       .HasData(
         new Animal { AnimalId = 1, Name = "Tucker", Species = "Dog", Age = 9, Fixed = true },
