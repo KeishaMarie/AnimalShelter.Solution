@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-[Route("api/[controller]")]  //Auth Management
+[Route("api/[controller]")]  // api/authmanagement
 [ApiController]
 [Produces("application/json")]
 public class AuthManagementController : ControllerBase
@@ -28,7 +28,7 @@ public class AuthManagementController : ControllerBase
   [Route("Register")]
   public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto user)
   {
-    if (Model.State.IsValid)
+    if (ModelState.IsValid)
     {
       var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
@@ -69,6 +69,74 @@ public class AuthManagementController : ControllerBase
     private string GenerateJwtToken(IdentityUser user)
     {
       // Define the jwt token responsible for creating our tokens
-      var jwtTokenHandler = new Jwt
+      var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+      // Get secret from appsettings
+      var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
+      var tokenDescriptor = new SecurityTokenDescriptor
+      {
+        Subject = new ClaimsIdentity(new []
+        {
+          new Claim("Id", user.Id),
+          new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+          new Claim(JwtRegisteredClaimNames.Email, user.Email),
+          new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        }),
+
+        Expires = DateTime.UtcNow.AddHours(6),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+      };
+
+      var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+      var jwtToken = jwtTokenHandler.WriteToken(token);
+      return jwtToken;
+    }
+
+    [HttpPost]
+    [Route("Login")]
+    public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
+    {
+      if(ModelState.IsValid)
+      {
+        var existingUser = await _userManager.FindByEmailAsync(user.Email);
+
+        if(existingUser == null)
+        {
+          return BadRequest(new RegistrationResponse() {
+            Result = false,
+            Errors = new List<string>() {
+              "Invalid authentication request"
+            }
+          });
+        }
+
+        var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+
+        if(isCorrect)
+        {
+          var jwtToken = GenerateJwtToken(existingUser);
+          return Ok(new RegistrationResponse() {
+            Result = true,
+            Token = jwtToken
+          });
+        }
+
+        else
+        {
+          return BadRequest(new RegistrationResponse() {
+            Result = false,
+            Errors = new List<string>() {
+              "Invalid authentication request"
+            }
+          });
+        }
+      }
+
+      return BadRequest(new RegistrationResponse() {
+        Result = false,
+        Errors = new List<string>() {
+          "Invalid payload"
+        }
+      });
     }
 }
