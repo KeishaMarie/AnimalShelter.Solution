@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using System; //Using for Uri
+using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]  // api/authmanagement
 [ApiController]
 [Produces("application/json")]
@@ -43,7 +42,7 @@ public class AuthManagementController : ControllerBase
         });
       }
 
-      var newUser = new IdentityUser(){Email = existingUser.Email, UserName = user.Email};
+      var newUser = new IdentityUser(){Email = user.Email, UserName = user.Email};
       var isCreated = await _userManager.CreateAsync(newUser, user.Password);
       if(isCreated.Succeeded)
       {
