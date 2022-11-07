@@ -23,13 +23,10 @@ This is an API that tracks animals in a shelter with create, update and delete f
 
 * Clone repository using URL https://github.com/KeishaMarie/AnimalShelter.Solution.git
 * Run dotnet restore and dotnet build
-* 
+* Create a file titled appsettings.json and insert the following code:
 
-_{Leave nothing to chance! You want it to be easy for potential users, employers and collaborators to run your app. Do I need to run a server? How should I set up my databases? Is there other code this application depends on? We recommend deleting the project from your desktop, re-cloning the project from GitHub, and writing down all the steps necessary to get the project working again.}_
 
-## Known Bugs
 
-* Authentication results in error request 403
 
 
 ## License
