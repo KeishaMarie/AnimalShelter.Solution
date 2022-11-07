@@ -23,7 +23,29 @@ This is an API that tracks animals in a shelter with create, update and delete f
 
 * Clone repository using URL https://github.com/KeishaMarie/AnimalShelter.Solution.git
 * Run dotnet restore and dotnet build
-* Create a file titled appsettings.json and insert the following code:
+* Create a file titled appsettings.json under the project folder and insert the following code:
+![appsettings](/READMEimg/appsettings.png)
+* Update the UID and Password with your own
+* update the secret string with your own. You will need to use a random string of 32 letters
+* Run dotnet ef migrations Initial
+* Run dotnet ef database update
+* Run dotnet build then dotnet run to run the application
+
+## API Documentation
+
+* You will need to create a token. I used Postman.
+* In Postman, insert the following URL: http://localhost:5000/api/authmanagement/register
+* In the body, choose JSON and then add the following code as a POST request:
+* ![tokenauth](/READMEimg/tokenauth.png)
+* A token will be genereated in the response. Under AUTH, choose Bearer Token and copy your token into the token box.
+
+* Endpoints:
+* ![endpoints](/READMEimg/endpoints.png)
+
+* To utilize POST and create a new instance of an animal:
+* ![postcreate](/READMEimg/post_create.png)
+
+* Example Query: https://localhost:5000/api/Animals/1
 
 
 
